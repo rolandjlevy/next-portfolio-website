@@ -4,13 +4,12 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Header from '../../../src/components/Header';
 import styles from '../../../styles/Home.module.css';
-import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../../src/helpers/constants';
+import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../../utils/constants';
 
 const Project: NextPage = ({ projectData }: any) => {
   const [data] = projectData;
   const router = useRouter();
   const { project, category } = router.query;
-  
   return (
     <div className={styles.container}>
       <Head>
@@ -19,7 +18,7 @@ const Project: NextPage = ({ projectData }: any) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      <Header title={project} />
+      <Header page={project} />
 
       <main className={styles.main}>
         

@@ -1,6 +1,12 @@
 import styles from '../../styles/Home.module.css';
+import { useRouter } from 'next/router';
 
-export default function Header({ title }) {
+export default function Header({ page }) {
+  const { query, route, asPath } = useRouter();
+  let breadcrumbsNav:any = []
+  if (asPath.includes('/projects')) {
+    breadcrumbsNav = ['projects', ...Object.values(query)];
+  }
   return (
     <header className={styles.header}>
       <nav>
@@ -10,9 +16,16 @@ export default function Header({ title }) {
           <li><a href="/projects">Projects</a></li>
           <li><a href="/contact">Contact</a></li>
         </ul>
+        {breadcrumbsNav?.length ? 
+         (<ul>
+          {breadcrumbsNav.map((item:any, index:number, arr:any) => {
+           const del = index < arr.length-1 ? ' > ' : '';
+           return <li>{item}{del}</li>
+         })}
+        </ul>) : null}
       </nav>
       <h1 className={styles.title}>
-        {title}
+        {page}
       </h1>
     </header>
   )

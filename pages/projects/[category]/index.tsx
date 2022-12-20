@@ -6,7 +6,7 @@ import Head from 'next/head';
 import styles from '../../../styles/Home.module.css';
 import { getSectionData } from '../../../src/helpers/utils';
 import Header from '../../../src/components/Header';
-import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../../src/helpers/constants';
+import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../../utils/constants';
 
 const Category: NextPage = ({ categoryData }: any) => {
   const router = useRouter();
@@ -19,7 +19,7 @@ const Category: NextPage = ({ categoryData }: any) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      <Header title={category} />
+      <Header page={category} />
 
       <main className={styles.main}>
 
@@ -57,5 +57,28 @@ Category.getInitialProps = async (context) => {
     categoryData
   };
 }
+
+// export const getServerSideProps = async () => {
+//   try {
+//     console.log('CONNECTING TO MONGO');
+//     await connectMongo();
+//     console.log('CONNECTED TO MONGO');
+
+//     console.log('FETCHING DOCUMENTS');
+//     const tests = await Test.find();
+//     console.log('FETCHED DOCUMENTS');
+
+//     return {
+//       props: {
+//         tests: JSON.parse(JSON.stringify(tests)),
+//       },
+//     };
+//   } catch (error) {
+//     console.log(error);
+//     return {
+//       notFound: true,
+//     };
+//   }
+// };
 
 export default Category;

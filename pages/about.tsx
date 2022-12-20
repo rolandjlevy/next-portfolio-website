@@ -12,7 +12,7 @@ const About: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header title="About" />
+      <Header page="About" />
 
       <main className={styles.main}>
 

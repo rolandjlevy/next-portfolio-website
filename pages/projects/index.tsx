@@ -1,10 +1,9 @@
-import type { NextPage } from 'next';
+import type { NextPage, NextApiRequest, NextApiResponse } from 'next';
 import type { AppProps, AppContext } from 'next/app';
 import App from 'next/app';
 import Head from 'next/head';
 import Header from '../../src/components/Header';
 import styles from '../../styles/Home.module.css';
-import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../src/helpers/constants';
 
 const Projects: NextPage = ({ projectData }: any) => {
   return (
@@ -15,7 +14,7 @@ const Projects: NextPage = ({ projectData }: any) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header title="Projects" />
+      <Header page="Projects" />
 
       <main className={styles.main}>
 
@@ -27,7 +26,7 @@ const Projects: NextPage = ({ projectData }: any) => {
               })}
             </ul>)
             :
-            <div>Loading...</div>}
+            <div>Loading Project Categories...</div>}
         </div>
       </main>
 
@@ -38,12 +37,21 @@ const Projects: NextPage = ({ projectData }: any) => {
   )
 }
 
-Projects.getInitialProps = async () => {
-  const response = await fetch(`${PROJECTS_ENDPOINT}/project-categories?origin=${PROJECTS_ORIGIN}`);
-  const data = await response.json();
-  return {
-    projectData: data
-  };
+Projects.getInitialProps = async (context) => {
+  try {
+    const { req, res, asPath, pathname } = context;
+    const { host } = req?.headers;
+    const response = await fetch(`https://${host}/api/project-categories`);
+    const projectData = await response.json();
+    return {
+      projectData
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      notFound: true,
+    };
+  }
 }
 
 export default Projects;
