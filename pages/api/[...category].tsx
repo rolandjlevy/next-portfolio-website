@@ -15,18 +15,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-try {
+  try {
+    const [key, category] = req.query.category;
     await connectMongoDb();
-    const group = await Projects.aggregate([
+    const categoryData:any = await Projects.aggregate([
       {
-        "$group": {
-          _id: "$category"
+        $match: {
+          category,
         }
       }
     ]);
-    const categories:any = group.map(item => item._id);
-    res.status(200).json(categories);
+    res.status(200).json(categoryData);
   } catch (error:any) {
-    res.json({ error });
+    res.json(error);
   }
 }

@@ -40,8 +40,9 @@ const Projects: NextPage = ({ projectData }: any) => {
 Projects.getInitialProps = async (context) => {
   try {
     const { req, res, asPath, pathname } = context;
-    const { host } = req?.headers;
-    const response = await fetch(`https://${host}/api/project-categories`);
+    const { host }:any = req?.headers;
+    const url = `https://${host}/api/projects`;
+    const response = await fetch(url);
     const projectData = await response.json();
     return {
       projectData

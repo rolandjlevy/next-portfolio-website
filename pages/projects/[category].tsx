@@ -3,10 +3,10 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
-import styles from '../../../styles/Home.module.css';
+import styles from '../../styles/Home.module.css';
 import { getSectionData } from '../../../src/helpers/utils';
-import Header from '../../../src/components/Header';
-import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../../utils/constants';
+import Header from '../../src/components/Header';
+import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../utils/constants';
 
 const Category: NextPage = ({ categoryData }: any) => {
   const router = useRouter();
@@ -49,36 +49,22 @@ const Category: NextPage = ({ categoryData }: any) => {
 }
 
 Category.getInitialProps = async (context) => {
-  const { req, res, query } = context;
-  const { category } = query;
-  const response = await fetch(`${PROJECTS_ENDPOINT}/project-category/${category}?origin=${PROJECTS_ORIGIN}`);
-  const categoryData = await response.json();
-  return {
-    categoryData
-  };
+  try {
+    const { req, res, query, asPath, pathname } = context;
+    const { category } = query;
+    const { host }:any = req?.headers;
+    const url = `https://${host}/api/category/${category}`;
+    const response = await fetch(url);
+    const categoryData = await response.json();
+    return {
+      categoryData
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      notFound: true,
+    };
+  }
 }
-
-// export const getServerSideProps = async () => {
-//   try {
-//     console.log('CONNECTING TO MONGO');
-//     await connectMongo();
-//     console.log('CONNECTED TO MONGO');
-
-//     console.log('FETCHING DOCUMENTS');
-//     const tests = await Test.find();
-//     console.log('FETCHED DOCUMENTS');
-
-//     return {
-//       props: {
-//         tests: JSON.parse(JSON.stringify(tests)),
-//       },
-//     };
-//   } catch (error) {
-//     console.log(error);
-//     return {
-//       notFound: true,
-//     };
-//   }
-// };
 
 export default Category;
