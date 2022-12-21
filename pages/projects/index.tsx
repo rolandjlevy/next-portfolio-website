@@ -3,9 +3,10 @@ import type { AppProps, AppContext } from 'next/app';
 import App from 'next/app';
 import Head from 'next/head';
 import Header from '../../src/components/Header';
+import { getInitialPropsData } from '../../utils/helpers';
 import styles from '../../styles/Home.module.css';
 
-const Projects: NextPage = ({ projectData }: any) => {
+const Projects: NextPage = ({ data }: any) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -19,9 +20,9 @@ const Projects: NextPage = ({ projectData }: any) => {
       <main className={styles.main}>
 
         <div className={styles.grid}>
-          {projectData?.length ?
+          {data?.length ?
             (<ul>
-              {projectData.map((item: String, index: Number) => {
+              {data.map((item: String, index: Number) => {
                 return <li><a href={`/projects/${item}`}>{item}</a></li>
               })}
             </ul>)
@@ -38,21 +39,11 @@ const Projects: NextPage = ({ projectData }: any) => {
 }
 
 Projects.getInitialProps = async (context) => {
-  try {
-    const { req, res, asPath, pathname } = context;
-    const { host }:any = req?.headers;
-    const url = `https://${host}/api/projects`;
-    const response = await fetch(url);
-    const projectData = await response.json();
-    return {
-      projectData
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      notFound: true,
-    };
-  }
+  const { req, res } = context;
+  const { host }:any = req?.headers;
+  const url = `https://${host}/api/projects`;
+  const data = await getInitialPropsData(url)
+  return data;
 }
 
 export default Projects;

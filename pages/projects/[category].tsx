@@ -4,11 +4,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
 import styles from '../../styles/Home.module.css';
-import { getSectionData } from '../../../src/helpers/utils';
 import Header from '../../src/components/Header';
-import { PROJECTS_ENDPOINT, PROJECTS_ORIGIN } from '../../utils/constants';
+import { getInitialPropsData } from '../../utils/helpers';
 
-const Category: NextPage = ({ categoryData }: any) => {
+const Category: NextPage = ({ data }: any) => {
   const router = useRouter();
   const { category } = router.query;
   return (
@@ -24,9 +23,9 @@ const Category: NextPage = ({ categoryData }: any) => {
       <main className={styles.main}>
 
         <div className={styles.grid}>
-          {categoryData?.length ? (
+          {data?.length ? (
             <ul className={styles.card}>
-              {categoryData.map((item:any) => (
+              {data.map((item:any) => (
                 <li>
                   <Link 
                     href="/projects/[category]/[${item.id}]"
@@ -49,22 +48,12 @@ const Category: NextPage = ({ categoryData }: any) => {
 }
 
 Category.getInitialProps = async (context) => {
-  try {
-    const { req, res, query, asPath, pathname } = context;
-    const { category } = query;
-    const { host }:any = req?.headers;
-    const url = `https://${host}/api/category/${category}`;
-    const response = await fetch(url);
-    const categoryData = await response.json();
-    return {
-      categoryData
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      notFound: true,
-    };
-  }
+	const { req, res, query } = context;
+	const { category } = query;
+	const { host }:any = req?.headers;
+	const url = `https://${host}/api/category/${category}`;
+  const data = await getInitialPropsData(url)
+  return data;
 }
 
 export default Category;
