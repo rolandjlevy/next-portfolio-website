@@ -3,12 +3,14 @@ export const getInitialPropsData = async (url:string) => {
     const response = await fetch(url);
     const data = await response.json();
     return {
-      data
+      data,
+      error: {}
     };
   } catch (error) {
-    console.log(error);
+    console.log('from helper function:', {error});
     return {
-      notFound: true,
+      data: null,
+      error
     };
   }
 }

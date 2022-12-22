@@ -6,7 +6,7 @@ import Header from '../../src/components/Header';
 import { getInitialPropsData } from '../../utils/helpers';
 import styles from '../../styles/Home.module.css';
 
-const Projects: NextPage = ({ data }: any) => {
+const Projects: NextPage = ({ data, error }: any) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -42,8 +42,9 @@ Projects.getInitialProps = async (context) => {
   const { req, res } = context;
   const { host }:any = req?.headers;
   const url = `https://${host}/api/projects`;
-  const data = await getInitialPropsData(url)
-  return data;
+  const { data, error } = await getInitialPropsData(url);
+  console.log({ data, error });
+  return { data, error };
 }
 
 export default Projects;
