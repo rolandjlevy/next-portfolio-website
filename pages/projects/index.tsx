@@ -20,15 +20,20 @@ const Projects: NextPage = ({ data, error }: any) => {
       <main className={styles.main}>
 
         <div className={styles.grid}>
+
           {data?.length ?
             (<ul>
-              {data.map((item: String, index: Number) => {
-                return <li><a href={`/projects/${item}`}>{item}</a></li>
+              {data?.map((item: String, index: Number) => {
+                return <li key={item}><a href={`/projects/${item}`}>{item}</a></li>
               })}
             </ul>)
             :
             <div>Loading Project Categories...</div>}
+
+          {error ? (<p> Error </p>) : null}
+
         </div>
+
       </main>
 
       <footer className={styles.footer}>
@@ -40,10 +45,10 @@ const Projects: NextPage = ({ data, error }: any) => {
 
 Projects.getInitialProps = async (context) => {
   const { req, res } = context;
-  const { host }:any = req?.headers;
+  const { host }: any = req?.headers;
   const url = `https://${host}/api/projects`;
-  const { data, error } = await getInitialPropsData(url);
-  console.log({ data, error });
+  const { data } = await getInitialPropsData(url);
+  const error = data?.length == 0;
   return { data, error };
 }
 

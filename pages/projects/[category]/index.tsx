@@ -25,8 +25,8 @@ const Category: NextPage = ({ data, error }: any) => {
         <div className={styles.grid}>
           {data?.length ? (
             <ul className={styles.card}>
-              {data.map((item:any) => (
-                <li>
+              {data?.map((item:any) => (
+                <li key={item.id}>
                   <Link 
                     href="/projects/[category]/[${item.id}]"
                     as={`/projects/${category}/${item.id}`}
@@ -37,6 +37,9 @@ const Category: NextPage = ({ data, error }: any) => {
               ))}
             </ul>
             ) : <div>Loading...</div>}
+          
+          {error ? (<p> Error </p>) : null}
+          
         </div>
       </main>
 
@@ -52,8 +55,8 @@ Category.getInitialProps = async (context) => {
 	const { category } = query;
 	const { host }:any = req?.headers;
 	const url = `https://${host}/api/category/${category}`;
-  const { data, error } = await getInitialPropsData(url);
-  console.log({ data, error });
+  const { data } = await getInitialPropsData(url);
+  const error = data?.length == 0;
   return { data, error };
 }
 

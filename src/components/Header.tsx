@@ -20,7 +20,7 @@ export default function Header({ page }) {
          (<ul>
           {breadcrumbsNav.map((item:any, index:number, arr:any) => {
            const del = index < arr.length-1 ? ' > ' : '';
-           return <li>{item}{del}</li>
+           return <li key={item}>{item}{del}</li>
          })}
         </ul>) : null}
       </nav>

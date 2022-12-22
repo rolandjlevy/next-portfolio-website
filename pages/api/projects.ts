@@ -27,6 +27,6 @@ try {
     const categories:any = group.map(item => item._id);
     res.status(200).json(categories);
   } catch (error:any) {
-    res.json(error);
+		res.status(error.response.status).json(error);
   }
 }
