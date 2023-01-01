@@ -1,11 +1,33 @@
-
 import axios from 'axios';
 
+axios.interceptors.response.use((response) => response, (error) => {
+  return Promise.reject(error);
+});
+
+axios.interceptors.request.use((request) => request, (error) => {
+  return Promise.reject(error);
+});
+
 export const getInitialPropsData = async (url:string) => {
-  const options = { method: 'GET', url };
-  const { data } = await axios(options);
-  return {
-    data
+  try {
+    const res = await axios.get(url);
+    return {
+      data: res.data,
+      error: null
+    }
+  } catch (err:any) {
+    let msg;
+    if (err.response) {
+      msg = `Client returned an error response: ${err}`;
+    } else if (err.request) {
+      msg = `Client never received a response: ${err}`;
+    } else {
+      msg = `Unknown error: ${err}`;
+    }
+    return { 
+      data: null,
+      error: msg, 
+    }
   }
 }
 

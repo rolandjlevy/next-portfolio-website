@@ -1,3 +1,4 @@
+import axios from 'axios';
 import type { NextPage, NextApiRequest, NextApiResponse } from 'next';
 import type { AppProps, AppContext } from 'next/app';
 import App from 'next/app';
@@ -21,16 +22,14 @@ const Projects: NextPage = ({ data, error }: any) => {
 
         <div className={styles.grid}>
 
-          {data?.length ?
+          {data?.length &&
             (<ul>
               {data?.map((item: String, index: Number) => {
                 return <li key={item}><a href={`/projects/${item}`}>{item}</a></li>
               })}
-            </ul>)
-            :
-            <div>Loading Project Categories...</div>}
+            </ul>)}
 
-          {error ? (<p> Error </p>) : null}
+          {error ? (<p> Error: {error} </p>) : null}
 
         </div>
 
@@ -47,8 +46,7 @@ Projects.getInitialProps = async (context) => {
   const { req, res } = context;
   const { host }: any = req?.headers;
   const url = `https://${host}/api/projects`;
-  const { data } = await getInitialPropsData(url);
-  const error = data?.length == 0;
+  const { data, error } = await getInitialPropsData(url);
   return { data, error };
 }
 

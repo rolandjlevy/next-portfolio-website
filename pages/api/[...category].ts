@@ -27,6 +27,6 @@ export default async function handler(
     ]);
     res.status(200).json(categoryData);
   } catch (error:any) {
-    res.json(error);
+		res.status(error.response.status).json(error.response.data);
   }
 }
